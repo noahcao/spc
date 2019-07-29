@@ -20,7 +20,7 @@ def train_policy(args, world, max_steps=40000000):
     # vehicle = random.choice(blueprint_library.filter('vehicle.bmw.*')) # randomly choose a bmw vehicle
     # spawn_points = world.get_map().get_spawn_points() # where to spawn the vehicle
     # agent = world.spawn_actor(vehicle, spawn_points)
-    agent = agent.Agent(world)
+    agent = agent.Agent(args, world)
 
     # -------- step 2: prepare the spc modules ------
     guides = generate_guide_grid(args.bin_divide)
