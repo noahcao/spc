@@ -2,15 +2,24 @@ from bbox import ClientSideBoundingBoxes
 import carla
 import numpy as np
 import math
+from carla import world
 
 VIEW_FOV = 90
+
+def convert_image(sensor_data, simple_seg=True):
+    obs = np.frombuffer(sensor_data['CameraRGB'].raw_data, dtype=np.uint8).reshape((256, 256, 4))[:, :, :3]
+    seg = labels_to_array(sensor_data['CameraSegmentation'])
+    if simple_seg:
+        seg = simplify_seg(seg)
+    return obs, seg
 
 class Agent(object):
     def __init__(self, args, world):
         self.args = args
         self.world = world
 
-        self.camera = None
+        self.rgb_camera = None
+        self.seg_camera = None
         self.car = None
         self.display = None
         self.image = None
@@ -35,6 +44,7 @@ class Agent(object):
 
     def setup_camera(self):
         # set up the camera to observe surrounding
+        '''
         camera_transform = carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15))
         self.camera = self.world.spawn_actor(self.camera_blueprint(), camera_transform, attach_to=self.car)
         weak_self = weakref.ref(self)
@@ -45,6 +55,12 @@ class Agent(object):
         calibration[1, 2] = self.args.height / 2.0
         calibration[0, 0] = calibration[1, 1] = self.args.width / (2.0 * np.tan(VIEW_FOV * np.pi / 360.0))
         self.camera.calibration = calibration
+        '''
+        
+        self.rgb_camera = world.CameraManager(self.car)
+        self.seg_camera = world.CameraManager(self.car)
+        self.rgb_camera.set_sensor(0)
+        self.seg_camera.set_sensor(5)
 
     def setup_collision_sensor(self):
         collision_sensor = self.world.get_blueprint_library().find('sensor.other.collision')
@@ -94,8 +110,10 @@ class Agent(object):
         return [self.offlane, self.collision, speed]
 
     def observe(self):
-        self.display = pygame.display.set_mode((VIEW_WIDTH, VIEW_HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
-        return self.display
+        return self.rgb_camera.observe(), info()
+
+    def segmentation(self):
+        return self.seg_camera.observe()
 
     def bbox(slef):
         bounding_box = ClientSideBoundingBoxes.get_bounding_boxes(vehicles, self.camera)
