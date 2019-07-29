@@ -47,7 +47,9 @@ def train_policy(args, world, max_steps=40000000):
             p.start()
 
     # initialize environment
-    obs, info = env.reset()
+    obs = agent.observe()
+    info = agent.info()
+    # obs, info = env.reset()
     if args.recording:
         log_frame(obs, buffer_manager.prev_act, video_folder, video)
 
