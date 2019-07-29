@@ -7,16 +7,24 @@ import sys
 import cv2
 import numpy as np
 import torch
+import agent
 from torch.autograd import Variable
 import pickle as pkl
 import multiprocessing as _mp
 mp = _mp.get_context('spawn')
 
+# to migrant from 0.8.x to 0.9.x, all "env" should be replaced with agent/world_submodule
+def train_policy(args, world, max_steps=40000000):
+    # ------- step 1: prepare the agent to train ------
+    # blueprint_library = world.get_blueprint_library()
+    # vehicle = random.choice(blueprint_library.filter('vehicle.bmw.*')) # randomly choose a bmw vehicle
+    # spawn_points = world.get_map().get_spawn_points() # where to spawn the vehicle
+    # agent = world.spawn_actor(vehicle, spawn_points)
+    agent = agent.Agent(world)
 
-def train_policy(args, env, max_steps=40000000):
+    # -------- step 2: prepare the spc modules ------
     guides = generate_guide_grid(args.bin_divide)
     train_net, net, optimizer, epoch, exploration, num_steps = init_models(args)
-
     buffer_manager = BufferManager(args)
     action_manager = ActionSampleManager(args, guides)
     action_var = Variable(torch.from_numpy(np.array([-1.0, 0.0])).repeat(1, args.frame_history_len - 1, 1), requires_grad=False).float()

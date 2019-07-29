@@ -20,17 +20,13 @@ if __name__ == '__main__':
     random.seed(args.seed)
 
     if 'carla' in args.env:
-        from carla.client import make_carla_client
-        from envs.CARLA.carla_env import CarlaEnv
-
         with carla.Client("localhost", 2000) as client:
             client.set_timeout(10.0)
             world = client.get_world()
-            env = CarlaEnv(client)
             if args.eval:
-                evaluate_policy(args, env)
+                evaluate_policy(args, world)
             else:
-                train_policy(args, env, max_steps=40000000)
+                train_policy(args, world, max_steps=40000000)
     else:
         with make_env(args) as env:
             if args.eval:
