@@ -30,13 +30,11 @@ class SPCBuffer(object):
         # determines whether there are enough expert data for self-imitation learning
         if len(self.epi_lens) == 0:
             return False
-        if self.args.verbose:
-            print('Calculating bar from %s' % str(self.epi_lens))
         bar = self.get_bar()
-        if self.args.verbose:
-            print('Bar: %d' % bar)
         bar_index = np.where(self.expert[:self.num_in_buffer] >= bar)[0]
         if self.args.verbose:
+            print('Calculating bar from %s' % str(self.epi_lens))
+            print('Bar: %d' % bar)
             print('Number of candidates: %d' % len(bar_index))
         return len(bar_index) >= batch_size
 

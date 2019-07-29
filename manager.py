@@ -16,10 +16,8 @@ class ObsBuffer:
 
     def store_frame(self, frame):
         obs_np = frame.transpose(2, 0, 1)
-        if len(self.last_obs_all) < self.frame_history_len:
-            self.last_obs_all = []
-            for ii in range(self.frame_history_len):
-                self.last_obs_all.append(obs_np)
+        if not len(self.last_obs_all) == self.frame_history_len:
+            self.last_obs_all = [obs_np for i in range(self.frame_history_len)]
         else:
             self.last_obs_all = self.last_obs_all[1:] + [obs_np]
         return np.concatenate(self.last_obs_all, 0)
@@ -36,10 +34,8 @@ class ActionBuffer:
 
     def store_frame(self, action):
         action = action.reshape(1, -1)
-        if len(self.last_action_all) < self.frame_history_len:
-            self.last_action_all = []
-            for ii in range(self.frame_history_len):
-                self.last_action_all.append(action)
+        if not len(self.last_action_all) == self.frame_history_len:
+            self.last_action_all = [action for i in range(self.frame_history_len)]
         else:
             self.last_action_all = self.last_action_all[1:] + [action]
         return np.concatenate(self.last_action_all, 0)[np.newaxis, ]
@@ -60,16 +56,16 @@ class BufferManager:
             self.spc_buffer.load(args.save_path)
         self.obs_buffer = ObsBuffer(args.frame_history_len)
         self.action_buffer = ActionBuffer(args.frame_history_len - 1)
+
         self.rewards = 0.0
         self.prev_act = np.array([1.0, 0.0])
-
         self.reward = 0.0
         self.collision_buffer = []
         self.offroad_buffer = []
         self.idx_buffer = []
         self.dist_sum = 0.0
 
-    def store_frame(self, obs, info):
+    def store_frame(self, obs, info):  
         past_n_frames = self.obs_buffer.store_frame(obs)
         obs_var = Variable(torch.from_numpy(past_n_frames).unsqueeze(0).float().cuda())
 
