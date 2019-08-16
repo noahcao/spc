@@ -1,6 +1,5 @@
 # Semantic Predictive Control for Explainable and Efficient Policy Learning
 <p align="center"><img width="70%" src="assets/carla_pred.png" /></p>
-
 [[paper]](https://go.yf.io/spc-paper) / [[video demo]](https://youtu.be/FSrzyR8UhxM)
 
 Semantic predictive control (SPC) is a policy learning framework that predicts future semantic segmentation and events by aggregating multi-scale feature maps.
@@ -42,6 +41,15 @@ SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=E
 CarlaUE4.exe -windowed -ResX=800 -ResY=600 -carla-server -carla-no-hud -carla-settings=Example.CarlaSettings.ini
 ```
 By default, the message port of Carla Simulator is 2000 and the **--port** arg should be set as the same.
+
+Besides, because of some known bug in carla 8 [issue#263](https://github.com/carla-simulator/carla/issues/263), we provide a docker environment to run spc where both carla simulator and spc client is packaged inside. Please use the docker image by:
+
+```shell
+docker pull deepdrive/spc
+docker run -it --runtime=nvidia [other_options] deepdrive/spc
+```
+
+Then, please run spc in the `spc` conda environment and boost carla simulator by the script `carla_0.8.4/run.sh`.
 
 ## Evaluation
 To evaluate the model and to produce demo with the latest model saved, we can simply run *main.py* with the flag **--eval**. Then, to transform saved snapshot images to a demo video, simply run the script:
