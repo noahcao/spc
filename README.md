@@ -42,7 +42,7 @@ CarlaUE4.exe -windowed -ResX=800 -ResY=600 -carla-server -carla-no-hud -carla-se
 ```
 By default, the message port of Carla Simulator is 2000 and the **--port** arg should be set as the same.
 
-Besides, because of some known bug in carla 8 [issue#263](https://github.com/carla-simulator/carla/issues/263), we provide a docker environment to run spc where both carla simulator and spc client is packaged inside. Please use the docker image by:
+Besides, because of some known bug in carla 8 ([issue#263](https://github.com/carla-simulator/carla/issues/263)), we provide a docker environment to run spc where both carla simulator and spc client are packaged inside. Please use the docker image by:
 
 ```shell
 docker pull deepdrive/spc
