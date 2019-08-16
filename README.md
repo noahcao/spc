@@ -1,6 +1,6 @@
 # Semantic Predictive Control for Explainable and Efficient Policy Learning
 <p align="center"><img width="70%" src="assets/carla_pred.png" /></p>
-[[paper]](https://go.yf.io/spc-paper) / [[video demo]](https://youtu.be/FSrzyR8UhxM)
+[paper](https://go.yf.io/spc-paper) / [video demo](https://youtu.be/FSrzyR8UhxM)
 
 Semantic predictive control (SPC) is a policy learning framework that predicts future semantic segmentation and events by aggregating multi-scale feature maps.
 It utilizes dense supervision from semantic segmentation for feature learning and greatly improves policy learning efficiency. 
@@ -29,27 +29,27 @@ bash train_#ENVNAME.sh
 ```
 Together with the training scripts, simulator environments need to be activated:
 
-### Carla
+### CARLA
 
-To train on carla, the [carla simulator](http://carla.org/) should be started at first, we give an example with default settings here:
-
+To train on carla, the [CARLA simulator](http://carla.org/) should be started first. Here is an example with default settings on Ubuntu
 ```
-### On Ubuntu
 SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini -windowed -ResX=256 -ResY=256 -carla-server -carla-no-hud
-
-### On Windows
+```
+Or on Windows
+```
 CarlaUE4.exe -windowed -ResX=800 -ResY=600 -carla-server -carla-no-hud -carla-settings=Example.CarlaSettings.ini
 ```
+
 By default, the message port of Carla Simulator is 2000 and the **--port** arg should be set as the same.
 
-Besides, because of some known bug in carla 8 ([issue#263](https://github.com/carla-simulator/carla/issues/263)), we provide a docker environment to run spc where both carla simulator and spc client are packaged inside. Please use the docker image by:
+We provide a docker image to run spc. It packages both carla simulator and spc client that can work around a [CARLA 8 issue](https://github.com/carla-simulator/carla/issues/263). To use the image
 
 ```shell
 docker pull deepdrive/spc
 docker run -it --runtime=nvidia [other_options] deepdrive/spc
 ```
 
-Then, please run spc in the `spc` conda environment and boost carla simulator by the script `carla_0.8.4/run.sh`.
+Then run spc in the `spc` conda environment and start carla simulator by the script `carla_0.8.4/run.sh`.
 
 ## Evaluation
 To evaluate the model and to produce demo with the latest model saved, we can simply run *main.py* with the flag **--eval**. Then, to transform saved snapshot images to a demo video, simply run the script:
