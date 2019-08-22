@@ -41,7 +41,7 @@ def init_parser(parser):
     parser.add_argument('--notify', type=bool, default=False)
     parser.add_argument('--autopilot', type=bool, default=False)
     parser.add_argument('--monitor-video-dir', type=str, default="monitor_record")
-    parser.add_argument('--port', type=int, default=2000)
+    parser.add_argument('--port', type=int, default=6000)
 
     # model configurations
     parser.add_argument('--pretrained', type=bool, default=True)

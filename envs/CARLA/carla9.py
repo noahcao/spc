@@ -4,22 +4,20 @@ import random
 import math
 import os
 import time
-from sensor import CollisionSensor, LaneInvasionSensor, CameraManager
+from .sensor import CollisionSensor, LaneInvasionSensor, CameraManager
 import cv2
 import shutil
 import sys
 import glob
 
 try:
-    sys.path.append(glob.glob('**/carla-*%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('**/*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
 except IndexError:
     pass
-
 import carla
-
 
 def find_weather_presets():
     rgx = re.compile('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)')
@@ -27,6 +25,15 @@ def find_weather_presets():
     presets = [x for x in dir(carla.WeatherParameters) if re.match('[A-Z].+', x)]
     return [(getattr(carla.WeatherParameters, x), name(x)) for x in presets]
 
+def world_env(args):
+    client = carla.Client('localhost', args.port)
+    client.set_timeout(20.0)
+    carla_world = client.get_world()
+    # by default, spc only supports running on carla in sync mode
+    settings = carla_world.get_settings()
+    settings.synchronous_mode = True
+    client.get_world().apply_settings(settings)
+    env = World(args, carla_world)
 
 class World(object):
     def __init__(self, args, carla_world):

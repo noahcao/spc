@@ -72,6 +72,9 @@ To help debug and training tracking, some advanced monitoring mechanisms are pro
 
 *P.S. Carla v0.8 is the only stable version and recommended for spc. Some issue about interlock data racing might occur in the sync mode of carla v0.9. Please refer this [issue](https://github.com/carla-simulator/carla/pull/1803) to work around it.*
 
+### TORCS and GTAV
+To run spc on TORCS or GTAV, please check the README files in `external\_files` and the [PyTORCS](https://github.com/ucbdrive/pyTORCS) repo for instructions.
+
 ## Evaluation
 
 To evaluate the model and to produce demo with the latest model saved, we can simply run *main.py* with the flag **--eval**. Then, to transform saved snapshot images to a demo video, simply run the script:
