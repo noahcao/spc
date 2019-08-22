@@ -31,7 +31,10 @@ Together with the training scripts, simulator environments need to be activated:
 
 ### CARLA
 
-To train on carla, the [CARLA simulator](http://carla.org/) should be started first. Here is an example with default settings on Ubuntu
+#### CARLA v0.8
+
+CARLA v0.8 is the only stable version released and the recommended CARLA version for spc and CARLA v0.8.4 is preferred by spc. To train on carla v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
+
 ```
 SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini -windowed -ResX=256 -ResY=256 -carla-server -carla-no-hud
 ```
@@ -40,9 +43,7 @@ Or on Windows
 CarlaUE4.exe -windowed -ResX=800 -ResY=600 -carla-server -carla-no-hud -carla-settings=Example.CarlaSettings.ini
 ```
 
-By default, the message port of Carla Simulator is 2000 and the **--port** arg should be set as the same.
-
-We provide a docker image to run spc. It packages both carla simulator and spc client that can work around a [CARLA 8 issue](https://github.com/carla-simulator/carla/issues/263). To use the image
+We provide a docker image to run spc on CARLA v0.8. It packages both carla simulator and spc client that can work around a [CARLA 8 issue](https://github.com/carla-simulator/carla/issues/263). To use the image
 
 ```shell
 docker pull deepdrive/spc
@@ -51,7 +52,20 @@ docker run -it --runtime=nvidia [other_options] deepdrive/spc
 
 Then run spc in the `spc` conda environment and start carla simulator by the script `carla_0.8.4/run.sh`.
 
+#### CARLA v0.9
+
+To use some advanced features provided in CARLA v0.9, we also support it but currently not recommended for stability issue. To train on carla v0.9, set the `env` parameter to be **carla9** . Only the versions later than v0.9.4 (included) are supported and v0.9.4 is preferred. To run on v0.9.5 or v0.9.6 check the file `envs/CARLA/world.py` to comment and uncomment some lines as guided.
+
+To start a CARLA9 simulator :
+
+```shell
+./CarlaUE4.sh [Map_option] -carla-server -world-port=xxx [other_options]
+```
+
+To help debug and training tracking, some advanced monitoring mechanisms are provided on carlav0.9. To enable them, set the flag `--monitor` or `--recording-frame` when booting the training.
+
 ## Evaluation
+
 To evaluate the model and to produce demo with the latest model saved, we can simply run *main.py* with the flag **--eval**. Then, to transform saved snapshot images to a demo video, simply run the script:
 
 ```
