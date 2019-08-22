@@ -34,6 +34,7 @@ def init_parser(parser):
     # enviroument configurations
     parser.add_argument('--env', type=str, default='torcs')
     parser.add_argument('--server', type=bool, default=False)
+    parser.add_argument('--max-steps', type=int, default=4000000000)
 
     # model configurations
     parser.add_argument('--pretrained', type=bool, default=True)

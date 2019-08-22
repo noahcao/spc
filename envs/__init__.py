@@ -19,7 +19,7 @@ class make_env(object):
         elif 'carla' in self.args.env:
             from carla.client import make_carla_client
             from .CARLA.carla_env import CarlaEnv
-            with make_carla_client('localhost', 2019) as client:
+            with make_carla_client('localhost', self.args.port) as client:
                 return CarlaEnv(client)
 
         elif 'gta' in self.args.env:
