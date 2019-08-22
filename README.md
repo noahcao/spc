@@ -33,7 +33,7 @@ Together with the training scripts, simulator environments need to be activated:
 
 #### CARLA v0.8
 
-CARLA v0.8 is the only stable version released and the recommended CARLA version for spc and CARLA v0.8.4 is preferred by spc. To train on carla v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
+CARLA v0.8 is the version used in the [spc paper](https://go.yf.io/spc-paper) . To train on carla v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
 
 ```
 SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini -windowed -ResX=256 -ResY=256 -carla-server -carla-no-hud
@@ -56,6 +56,12 @@ Then run spc in the `spc` conda environment and start carla simulator by the scr
 
 To use some advanced features provided in CARLA v0.9, we also support it but currently not recommended for stability issue. To train on carla v0.9, set the `env` parameter to be **carla9** . Only the versions later than v0.9.4 (included) are supported and v0.9.4 is preferred. To run on v0.9.5 or v0.9.6 check the file `envs/CARLA/world.py` to comment and uncomment some lines as guided.
 
+We recommend to install carla client api for v0.9.4 with pip:
+
+```
+pip install carla=0.9.4
+```
+
 To start a CARLA9 simulator :
 
 ```shell
@@ -63,6 +69,8 @@ To start a CARLA9 simulator :
 ```
 
 To help debug and training tracking, some advanced monitoring mechanisms are provided on carlav0.9. To enable them, set the flag `--monitor` or `--recording-frame` when booting the training.
+
+*P.S. Carla v0.8 is the only stable version and recommended for spc. Some issue about interlock data racing might occur in the sync mode of carla v0.9. Please refer this [issue](https://github.com/carla-simulator/carla/pull/1803) to work around it.*
 
 ## Evaluation
 
