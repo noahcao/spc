@@ -35,6 +35,7 @@ Together with the training scripts, simulator environments need to be activated:
 
 CARLA v0.8 is the version used in the [spc paper](https://go.yf.io/spc-paper) . To train on carla v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
 
+To train on carla, the [CARLA simulator](http://carla.org/) should be started first. Here is an example with default settings on Ubuntu
 ```
 SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini -windowed -ResX=256 -ResY=256 -carla-server -carla-no-hud
 ```
@@ -74,6 +75,16 @@ To help debug and training tracking, some advanced monitoring mechanisms are pro
 
 ### TORCS and GTAV
 To run spc on TORCS or GTAV, please check the README files in `external\_files` and the [PyTORCS](https://github.com/ucbdrive/pyTORCS) repo for instructions.
+
+
+We provide a docker image to run spc. It packages both carla simulator and spc client that can work around a [CARLA 8 issue](https://github.com/carla-simulator/carla/issues/263). To use the image
+
+```shell
+docker pull deepdrive/spc
+docker run -it --runtime=nvidia [other_options] deepdrive/spc
+```
+
+Then run spc in the `spc` conda environment and start carla simulator by the script `carla_0.8.4/run.sh`.
 
 ## Evaluation
 
