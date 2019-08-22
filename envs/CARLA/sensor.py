@@ -1,6 +1,5 @@
 import os
 import carla
-# import pygame
 import weakref
 from carla import ColorConverter as cc
 import numpy as np 
@@ -108,7 +107,7 @@ class LaneInvasionSensor(object):
         self.sensor = None
         self._parent = parent_actor
         world = self._parent.get_world()
-        # bp = world.get_blueprint_library().find('sensor.other.lane_invasion')
+        # bp = world.get_blueprint_library().find('sensor.other.lane_invasion') # to support carla0.9.5
         bp = world.get_blueprint_library().find('sensor.other.lane_detector')
         self.sensor = world.spawn_actor(bp, carla.Transform(), attach_to=self._parent)
         # We need to pass the lambda a weak reference to self to avoid circular
@@ -155,9 +154,6 @@ class CameraManager(object):
         self.tag = tag
         self.output = np.zeros([args.frame_height, args.frame_width, 3])
         self.timestamp = -1
-        # self._camera_transforms = [
-        #     carla.Transform(carla.Location(x=-5.5, z=2.8), carla.Rotation(pitch=-15)),
-        #     carla.Transform(carla.Location(x=1.6, z=1.7))]
         self.camera_transform = carla.Transform(carla.Location(x, y, z))
         self._transform_index = 1
         self._sensors = [
@@ -185,16 +181,12 @@ class CameraManager(object):
         if self.args.recording_frame:
             if not os.path.isdir(os.path.join(self.args.record_dir, "obs")):
                 os.makedirs(os.path.join(self.args.record_dir, "obs"))
-            # if not os.path.isdir(os.path.join(self.args.record_dir, "seg")):
-            #     os.makedirs(os.path.join(self.args.record_dir, "seg"))
 
         if self.args.monitor:
             if not os.path.isdir(os.path.join(self.args.record_dir, "monitor")):
                 os.makedirs(os.path.join(self.args.record_dir, "monitor"))
 
     def toggle_camera(self):
-        # self._transform_index = (self._transform_index + 1) % len(self._camera_transforms)
-        # self.sensor.set_transform(self._camera_transforms[self._transform_index])
         self.sensor.set_transform(self.camera_transform)
 
     def set_sensor(self, index):
@@ -209,7 +201,6 @@ class CameraManager(object):
                 self._surface = None
             self.sensor = self._parent.get_world().spawn_actor(
                 self._sensors[index][-1],
-                # self._camera_transforms[self._transform_index],
                 self.camera_transform,
                 attach_to=self._parent)
             # We need to pass the lambda a weak reference to self to avoid circular reference.
@@ -281,9 +272,6 @@ class CameraManager(object):
         if not self:
             return
         image.convert(self._sensors[self._index][1])
-        # if self.monitor_record:
-        #     record_name = os.path.join(self.args.record_dir, "monitor/%08d.png" % self.timestamp)
-        #     image.save_to_disk(record_name)
         self.record_image = image
 
     @staticmethod
@@ -293,7 +281,6 @@ class CameraManager(object):
             return
         array = np.frombuffer(image.raw_data, dtype=np.dtype("uint8"))
         array = np.reshape(array, (image.height, image.width, 4))
-        # ori_array = array
         array = array[:, :, :3] # RGBA -> RGB
         ori_array = array
         array = array[:, :, -1] # Only last channel, for segmentation, it's class type
@@ -305,6 +292,3 @@ class CameraManager(object):
         self.record_image = image
         self.output = array
         
-        # if self._recording:
-        #     record_name = os.path.join(self.args.record_dir, "seg/%08d.png" % image.frame_number)
-        #     image.save_to_disk(record_name)
