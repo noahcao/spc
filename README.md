@@ -33,9 +33,9 @@ Together with the training scripts, simulator environments need to be activated:
 
 #### CARLA v0.8
 
-CARLA v0.8 is the version used in the [spc paper](https://go.yf.io/spc-paper) . To train on carla v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
+CARLA v0.8 is used in the [spc paper](https://go.yf.io/spc-paper). To train on CARLA v0.8, set the `env` parameter to be **carla8** and start the [CARLA simulator](http://carla.org/) first. Here is an example with default settings on Ubuntu
 
-To train on carla, the [CARLA simulator](http://carla.org/) should be started first. Here is an example with default settings on Ubuntu
+To train on CARLA, the [CARLA simulator](http://carla.org/) should be started first. Here is an example with default settings on Ubuntu
 ```
 SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 ./CarlaUE4.sh -carla-settings=Example.CarlaSettings.ini -windowed -ResX=256 -ResY=256 -carla-server -carla-no-hud
 ```
